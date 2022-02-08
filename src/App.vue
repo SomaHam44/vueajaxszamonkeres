@@ -151,10 +151,9 @@ td {
   padding: 1em;
 }
 body {
-  background-color: aqua;
+  background-color: cornflowerblue;
 }
 button {
-  margin-top: 1em;
   margin-left: 1em;
 }
 </style>
