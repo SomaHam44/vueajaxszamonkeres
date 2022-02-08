@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Statues</h1>
     <table>
       <thead>
         <tr>
@@ -30,8 +31,9 @@
             <input type="number"  v-model="statue.price">
           </td>
           <td>
-            <button @click="save">Mentés</button>
-            <button @click="reset">Mégse</button>
+            <button v-if="mod_new" @click="newStatue" :disabled="saving">Létrehozás</button>
+            <button v-if="!mod_new" @click="saveStatue" :disabled="saving">Mentés</button>
+            <button v-if="!mod_new" @click="cancelEdit" :disabled="saving">Mégse</button>
           </td>
         </tr>       
         </tbody>      
@@ -49,8 +51,8 @@ export default {
   },
   data() {
     return {
-      szerkeszto: false,
-      uj: false,
+     mod_new: true, 
+     saving: false,
     statue: {
         id: null,
         person: '',
@@ -76,6 +78,7 @@ export default {
 
     },
     async newStatue() {
+       this.saving='disabled'
       await fetch('http://127.0.0.1:8000/api/statues', {
         method: 'POST',
         headers: {
@@ -85,12 +88,13 @@ export default {
         body: JSON.stringify(this.statue)
       })
       await this.betoltes()
+      this.saving=false
       this.reset()
-      this.szerkeszto = false
-      this.uj = true
+    
 
     },
     async saveStatue() {
+       this.saving='disabled'
      await fetch(`http://127.0.0.1:8000/api/statues/${this.statue.id}`, {
        method: 'PATCH',
        headers: {
@@ -100,16 +104,17 @@ export default {
        body: JSON.stringify(this.statue) 
      })
      await this.betoltes()
+     this.saving=false
      this.reset()
-     this.szerkeszto = false
-     this.uj = false
     },
     async editStatue(id) {
       let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
       let data = await Response.json()
       this.statue = {...data};
-      this.szerkeszto = true
-      this.uj = false
+      this.mod_new = false
+    },
+    cancelEdit() {
+      this.reset()
     },
     reset() {
       this.statue = {
@@ -118,15 +123,7 @@ export default {
         height: null,
         price: null
       }
-      this.szerkeszto = false
-    },
-    save() {
-      if (this.szerkeszto) {
-        this.saveStatue()
-      }
-      else if (!this.uj) {
-        this.newStatue()
-      }
+      this.mod_new = true
     },
   },
     mounted() {
@@ -149,6 +146,8 @@ export default {
 table {
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid blue;
+  border-collapse: collapse;
 }
 
 td {
