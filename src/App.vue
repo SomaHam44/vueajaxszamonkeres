@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       szerkeszto: false,
+      uj: false,
     statue: {
         id: null,
         person: '',
@@ -86,6 +87,7 @@ export default {
       await this.betoltes()
       this.reset()
       this.szerkeszto = false
+      this.uj = true
 
     },
     async saveStatue() {
@@ -100,12 +102,14 @@ export default {
      await this.betoltes()
      this.reset()
      this.szerkeszto = false
+     this.uj = false
     },
     async editStatue(id) {
       let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
       let data = await Response.json()
       this.statue = {...data};
       this.szerkeszto = true
+      this.uj = false
     },
     reset() {
       this.statue = {
@@ -120,7 +124,7 @@ export default {
       if (this.szerkeszto) {
         this.saveStatue()
       }
-      else {
+      else if (!this.uj) {
         this.newStatue()
       }
     },
@@ -151,7 +155,7 @@ td {
   padding: 1em;
 }
 body {
-  background-color: cornflowerblue;
+  background-color: cornsilk;
 }
 button {
   margin-left: 1em;
