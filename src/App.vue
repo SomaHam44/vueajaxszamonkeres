@@ -15,7 +15,7 @@
             <td>{{ statue.height }}</td>
             <td>{{ statue.price }}</td>
             <td>
-              <button>Törlés</button>
+              <button @click="deleteStatue(statue.id)">Törlés</button>
               <button>Szerkesztés</button>
             </td>
           </tr>
@@ -64,6 +64,14 @@ export default {
       let Response = await fetch('http://127.0.0.1:8000/api/statues')
       let adat = await Response.json()
       this.statues = adat
+
+    },
+    async deleteStatue(id) {
+      let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`, {
+      method: 'DELETE'
+      })
+      console.log(Response)
+      await this.betoltes()
 
     },
     mounted() {
