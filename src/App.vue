@@ -30,8 +30,8 @@
             <input type="number"  v-model="statue.price">
           </td>
           <td>
-            <button @click="saveStatue" :disabled="mentes">Mentés</button>
-            <button @click="cancel" :disabled="mentes">Mégse</button>
+            <button @click="save">Mentés</button>
+            <button @click="reset">Mégse</button>
           </td>
         </tr>       
         </tbody>      
@@ -50,7 +50,7 @@ export default {
   },
   data() {
     return {
-    mentes: false,
+      szerkeszto: false,
     statue: {
         id: null,
         person: '',
@@ -76,7 +76,6 @@ export default {
 
     },
     async newStatue() {
-      this.mentes = 'disabled'
       await fetch('http://127.0.0.1:8000/api/statues', {
         method: 'POST',
         headers: {
@@ -86,12 +85,11 @@ export default {
         body: JSON.stringify(this.statue)
       })
       await this.betoltes()
-      this.mentes = false
       this.reset()
+      this.szerkeszto = false
 
     },
     async saveStatue() {
-      this.mentes = 'disabled'
      await fetch(`http://127.0.0.1:8000/api/statues/${this.statue.id}`, {
        method: 'PATCH',
        headers: {
@@ -101,16 +99,14 @@ export default {
        body: JSON.stringify(this.statue) 
      })
      await this.betoltes()
-     this.mentes = false
      this.reset()
+     this.szerkeszto = false
     },
     async editStatue(id) {
       let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
       let data = await Response.json()
       this.statue = {...data};
-    },
-    cancel() {
-      this.reset()
+      this.szerkeszto = true
     },
     reset() {
       this.statue = {
@@ -118,6 +114,15 @@ export default {
         person: '',
         height: null,
         price: null
+      }
+      this.szerkeszto = false
+    },
+    save() {
+      if (this.szerkeszto) {
+        this.saveStatue()
+      }
+      else {
+        this.newStatue()
       }
     },
     mounted() {
@@ -136,5 +141,20 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  padding: 1em;
+}
+body {
+  background-color: aqua;
+}
+button {
+  margin-top: 1em;
 }
 </style>
