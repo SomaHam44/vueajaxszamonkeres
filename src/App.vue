@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-   <Statues />
-   <Paintings />
+    <nav>
+      <router-link to="/paintings">Paintings</router-link>
+      <router-link to="/">Statues</router-link>
+    </nav>
+    <hr/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 
-import Statues from './components/Statues.vue'
-import Paintings from './components/Paintings.vue'
+
 export default {
   name: 'App',
   components: {
-    Statues, Paintings
+    
   },
   
   }
@@ -29,5 +32,12 @@ export default {
   margin-top: 60px;
 }
 
+nav {
+  text-decoration: none;
+  color: white;
+}
 
+nav a.router-link-exact-active {
+  background-color: cadetblue;
+}
 </style>
