@@ -18,7 +18,22 @@
               <button>Törlés</button>
               <button>Szerkesztés</button>
             </td>
-          </tr>        
+          </tr>
+          <tr>
+          <td>
+            <input type="text"  v-model="statue.person">
+          </td>
+          <td>
+            <input type="number"  v-model="statue.height">
+          </td>
+          <td>
+            <input type="number"  v-model="statue.price">
+          </td>
+          <td>
+            <button>Mentés</button>
+            <button>Mégse</button>
+          </td>
+        </tr>       
         </tbody>      
     </table>
     <button @click="betoltes">Betöltés</button>
