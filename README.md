@@ -1,4 +1,4 @@
-# [Név]
+# Solti Soma
 
 ## Hogyan kezdj neki?
 
