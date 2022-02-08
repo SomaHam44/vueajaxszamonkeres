@@ -36,7 +36,6 @@
         </tr>       
         </tbody>      
     </table>
-    <button @click="betoltes">Betöltés</button>
     
   </div>
 </template>
@@ -125,12 +124,12 @@ export default {
         this.newStatue()
       }
     },
+  },
     mounted() {
       this.betoltes()
     }
-  },
+  }
 
-}
 </script>
 
 <style>
