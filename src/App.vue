@@ -16,7 +16,7 @@
             <td>{{ statue.price }}</td>
             <td>
               <button @click="deleteStatue(statue.id)">Törlés</button>
-              <button>Szerkesztés</button>
+              <button @click="editStatue(statue.id)">Szerkesztés</button>
             </td>
           </tr>
           <tr>
@@ -30,8 +30,9 @@
             <input type="number"  v-model="statue.price">
           </td>
           <td>
-            <button>Mentés</button>
-            <button>Mégse</button>
+            <button v-if="new_mode" @click="newStatue" :disabled="mentes">Létrehozás</button>
+            <button v-if="!new_mode" @click="saveStatue" :disabled="mentes">Mentés</button>
+            <button v-if="!new_mode" @click="cancel" :disabled="mentes">Mégse</button>
           </td>
         </tr>       
         </tbody>      
@@ -50,7 +51,9 @@ export default {
   },
   data() {
     return {
-     statue: {
+    new_mode: true,
+    mentes: false,
+    statue: {
         id: null,
         person: '',
         height: null,
@@ -73,6 +76,53 @@ export default {
       console.log(Response)
       await this.betoltes()
 
+    },
+    async newStatue() {
+      this.mentes = 'disabled'
+      await fetch('http://127.0.0.1:8000/api/statues', {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+          'Accept' : 'application/json'
+        },
+        body: JSON.stringify(this.statue)
+      })
+      await this.betoltes()
+      this.mentes = false
+      this.reset()
+
+    },
+    async saveStatue() {
+      this.mentes = 'disabled'
+     await fetch(`http://127.0.0.1:8000/api/statues/${this.statue.id}`, {
+       method: 'PATCH',
+       headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(this.statue) 
+     })
+     await this.betoltes()
+     this.mentes = false
+     this.reset()
+    },
+    async editStatue(id) {
+      let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
+      let data = await Response.json()
+      this.statue = {...data};
+      this.new_mode = false
+    },
+    cancel() {
+      this.reset()
+    },
+    reset() {
+      this.statue = {
+        id: null,
+        person: '',
+        height: null,
+        price: null
+      }
+      this.new_mode = true
     },
     mounted() {
       this.betoltes()
