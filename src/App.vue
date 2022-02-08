@@ -30,9 +30,8 @@
             <input type="number"  v-model="statue.price">
           </td>
           <td>
-            <button v-if="new_mode" @click="newStatue" :disabled="mentes">Létrehozás</button>
-            <button v-if="!new_mode" @click="saveStatue" :disabled="mentes">Mentés</button>
-            <button v-if="!new_mode" @click="cancel" :disabled="mentes">Mégse</button>
+            <button @click="saveStatue" :disabled="mentes">Mentés</button>
+            <button @click="cancel" :disabled="mentes">Mégse</button>
           </td>
         </tr>       
         </tbody>      
@@ -51,7 +50,6 @@ export default {
   },
   data() {
     return {
-    new_mode: true,
     mentes: false,
     statue: {
         id: null,
@@ -110,7 +108,6 @@ export default {
       let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
       let data = await Response.json()
       this.statue = {...data};
-      this.new_mode = false
     },
     cancel() {
       this.reset()
@@ -122,7 +119,6 @@ export default {
         height: null,
         price: null
       }
-      this.new_mode = true
     },
     mounted() {
       this.betoltes()
